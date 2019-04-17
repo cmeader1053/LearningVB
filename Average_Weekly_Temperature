@@ -1,0 +1,24 @@
+private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            int intWeek1 = Convert.ToInt32(txtWeek1.Text);
+            int intWeek2 = Convert.ToInt32(txtWeek2.Text);
+            int intWeek3 = Convert.ToInt32(txtWeek3.Text);
+            int intWeek4 = Convert.ToInt32(txtWeek4.Text);
+            int intWeek5 = Convert.ToInt32(txtWeek5.Text);
+            int intAverage = (intWeek1 + intWeek2 + intWeek3 + intWeek4 + intWeek5) / 5;
+            string strAverage = Convert.ToString(intAverage);
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            lblAverage.Text = "";
+            txtWeek1.Text = "";
+            txtWeek2.Text = "";
+            txtWeek3.Text = "";
+            txtWeek4.Text = "";
+            txtWeek5.Text = "";
