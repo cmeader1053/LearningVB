@@ -1,0 +1,28 @@
+Public Class frmClub
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
+        If ListBoxGeneral.SelectedIndex = -1 Then
+            MsgBox("Please select student name")
+        Else
+            If ListBoxClub.Items.IndexOf(ListBoxGeneral.SelectedItem) < 0 Then
+                ListBoxClub.Items.Add(ListBoxGeneral.SelectedItem)
+            End If
+        End If
+        lblMembers.Text = ListBoxClub.Items.Count.ToString + " members"
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    End Sub
+
+    Private Sub btnRemove_Click(sender As Object, e As EventArgs) Handles btnRemove.Click
+        If ListBoxClub.SelectedIndex = -1 Then
+            MsgBox("Please select student name")
+        Else
+            ListBoxClub.Items.Remove(ListBoxClub.SelectedItem)
+        End If
+        lblMembers.Text = ListBoxClub.Items.Count.ToString + " members"
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        End
+    End Sub
+End Class
