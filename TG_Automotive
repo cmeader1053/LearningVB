@@ -1,0 +1,157 @@
+Public Class FrmTGAuto
+    Const decTax_Rate As Decimal = 0.06D
+    Const decOil As Decimal = 36D
+    Const decLube As Decimal = 28D
+    Const decRadiator As Decimal = 50D
+    Const decTransmission As Decimal = 120D
+    Const decInspection As Decimal = 15D
+    Const decMuffler As Decimal = 200D
+    Const decTire As Decimal = 20D
+
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        ClearOilLub()
+        ClearFlushes()
+        ClearMisc()
+        ClearOther()
+
+        lblParts.Text = String.Empty
+        lblService.Text = String.Empty
+        lblTax.Text = String.Empty
+        lblTotalFees.Text = String.Empty
+    End Sub
+
+    Sub ClearOilLub()
+        ChkOil.Checked = False
+        ChkLube.Checked = False
+    End Sub
+
+    Sub ClearFlushes()
+        chkRadiator.Checked = False
+        chkTransmission.Checked = False
+    End Sub
+
+    Sub ClearMisc()
+        chkInspection.Checked = False
+        chkMuffler.Checked = False
+        chkTire.Checked = False
+    End Sub
+
+    Sub ClearOther()
+        txtLabor.Text = "0"
+        txtParts.Text = "0"
+    End Sub
+
+    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
+        End
+    End Sub
+
+    Private Sub btnCalculate_Click(sender As Object, e As EventArgs) Handles btnCalculate.Click
+        Dim decServicesandLabor As Decimal
+        Dim decParts As Decimal
+        Dim decTax As Decimal
+        Dim decTotalFees As Decimal
+
+      
+
+
+
+  If Not ValidateInputs() Then
+            Exit Sub
+        End If
+
+        decServicesandLabor = CalcOilLubeCharges() + CalcFlushCharges() + CalcMiscCharges() + txtLabor.Text
+        decParts = txtParts.Text
+        decTax = decTax_Rate * txtParts.Text
+        decTotalFees = decServicesandLabor + decParts + decTax
+
+        lblService.Text = decServicesandLabor.ToString("c")
+        lblParts.Text = decParts.ToString("c")
+        lblTax.Text = decTax.ToString("c")
+        lblTotalFees.Text = decTotalFees.ToString("c")
+    End Sub
+
+    Private Function ValidateInputs() As Boolean
+        Dim blnValid As Boolean
+        Dim blnDec As Decimal
+
+        blnValid = Decimal.TryParse(txtParts.Text, blnDec)
+
+        If blnValid = False Or blnDec < 0 Then
+            MsgBox("Please enter a dollar amount for the cost of the parts.")
+            With txtParts
+                .SelectAll()
+                .Focus()
+            End With
+            Return False
+        End If
+
+        blnValid = Decimal.TryParse(txtLabor.Text, blnDec)
+
+        If blnValid = False Or blnDec < 0 Then
+            MsgBox("Please enter a dollar amount for Labor Cost.")
+            With txtLabor
+                .SelectAll()
+                .Focus()
+            End With
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Function CalcFlushCharges() As Decimal
+        Dim decRadTrans As Decimal = 0D
+
+        If chkRadiator.Checked = True Then
+            decRadTrans += decRadiator
+        End If
+        If chkTransmission.Checked = True Then
+            decRadTrans += decTransmission
+        End If
+        Return decRadTrans
+    End Function
+
+   
+
+
+ Function CalcMiscCharges() As Decimal
+        Dim decMisc As Decimal = 0
+
+        If chkInspection.Checked = True Then
+            decMisc += decInspection
+        End If
+        If chkMuffler.Checked = True Then
+            decMisc += decMuffler
+        End If
+        If chkTire.Checked = True Then
+            decMisc += decTire
+        End If
+        Return decMisc
+    End Function
+
+    Function CalcOilLubeCharges() As Decimal
+        Dim decOilLube As Decimal = 0D
+        If ChkOil.Checked = True Then
+            decOilLube += decOil
+        End If
+        If ChkLube.Checked = True Then
+            decOilLube += decLube
+        End If
+        Return decOilLube
+    End Function
+
+    Private Function CalcTax(ByVal decAmount As Decimal) As Decimal
+        Dim decParts As Decimal
+        If txtParts.Text = String.Empty Then
+            Return 0
+        Else
+            decParts = CDec(txtParts.Text)
+            Return decParts * decTax_Rate
+        End If
+    End Function
+
+
+    Private Sub FrmTGAuto_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+End Class
