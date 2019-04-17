@@ -1,0 +1,121 @@
+
+Public Class frmAddressBook
+    Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
+        isEdit = False
+        frmAdd.ShowDialog()
+        UpdateListBox()
+
+    End Sub
+
+    Private Sub frmAddressBook_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
+        Me.Close()
+    End Sub
+
+    Private Sub UpdateListBox()
+        lbxAddressBook.Items.Clear()
+        Dim contact As Address
+        For Each contact In AddressList
+            lbxAddressBook.Items.Add(contact.Name)
+        Next
+
+        If lbxAddressBook.Items.Count > 0 Then
+            lbxAddressBook.SelectedIndex = 0
+        End If
+    End Sub
+
+    Private Sub btnRemove_Click(sender As Object, e As EventArgs) Handles btnRemove.Click
+        Dim intIndex As Integer
+
+        If lbxAddressBook.SelectedIndex <> -1 Then
+            If MessageBox.Show("Are you sure?", "Confirm Deletion", MessageBoxButtons.YesNo) = Windows.Forms.DialogResult.Yes Then
+                intIndex = lbxAddressBook.SelectedIndex
+
+                Try
+                    AddressList.Remove(lbxAddressBook.SelectedItem.ToString())
+
+                    UpdateListBox()
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                End Try
+            End If
+        End If
+    End Sub
+
+    Private Sub btnEdit_Click(sender As Object, e As EventArgs) Handles btnEdit.Click
+        Dim contact As Address
+        contact = AddressList(lbxAddressBook.SelectedItem.ToString())
+        frmAdd.txtName.Text = contact.Name
+        frmAdd.txtEmail.Text = contact.Email
+        frmAdd.txtPhone.Text = contact.Phone
+        frmAdd.txtComments.Text = contact.Comments
+        isEdit = True
+        frmAdd.ShowDialog()
+        UpdateListBox()
+    End Sub
+End Class
+
+Public Class frmAdd
+    Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
+        Dim Address As New Address
+
+        If isEdit Then
+            AddressList.Remove(frmAddressBook.lbxAddressBook.SelectedItem.ToString())
+        End If
+
+        Address.Name = txtName.Text
+        Address.Phone = txtPhone.Text
+        Address.Email = txtEmail.Text
+        Address.Comments = txtComments.Text
+        AddRecord(Address)
+
+        txtName.Clear()
+        txtEmail.Clear()
+        txtPhone.Clear()
+        txtComments.Clear()
+
+        Me.Close()
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
+    End Sub
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        txtName.Clear()
+        txtEmail.Clear()
+        txtPhone.Clear()
+        txtComments.Clear()
+
+        txtName.Focus()
+
+    End Sub
+
+    Private Sub frmAdd_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+End Class
+Address Class:
+Public Class Address
+    Public Name As String
+    Public Email As String
+    Public Phone As String
+    Public Comments As String
+
+    Dim AddressList As New Collection
+End Class
+
+Module AddressCollectionModule
+    Public AddressList As New Collection
+    Public isEdit As Boolean
+
+    Public Sub AddRecord(ByVal s As Address)
+        Try
+            AddressList.Add(s, s.Name)
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+    End Sub
+End Module
