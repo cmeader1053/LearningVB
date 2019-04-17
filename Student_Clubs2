@@ -1,0 +1,50 @@
+Public Class frmClub
+    Dim MasterArray(2, 10) As String
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
+        If ListBoxGeneral.SelectedIndex = -1 Then
+            MsgBox("Please select student name")
+        Else
+            If ListBoxClub.Items.IndexOf(ListBoxGeneral.SelectedItem) < 0 Then
+                ListBoxClub.Items.Add(ListBoxGeneral.SelectedItem)
+            End If
+        End If
+        lblMembers.Text = ListBoxClub.Items.Count.ToString + " members"
+
+        fillarray(cmbxGroups.SelectedIndex)
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    End Sub
+
+    Private Sub btnRemove_Click(sender As Object, e As EventArgs) Handles btnRemove.Click
+        If ListBoxClub.SelectedIndex = -1 Then
+            MsgBox("Please select student name")
+        Else
+            ListBoxClub.Items.Remove(ListBoxClub.SelectedItem)
+        End If
+        lblMembers.Text = ListBoxClub.Items.Count.ToString + " members"
+
+        fillarray(cmbxGroups.SelectedIndex)
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        End
+    End Sub
+
+    Public Sub fillarray(index As Integer)
+        For i = 0 To ListBoxClub.Items.Count - 1
+            MasterArray(index, i) = ListBoxClub.Items(i).ToString
+        Next
+    End Sub
+
+    Private Sub cmbxGroups_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbxGroups.SelectedIndexChanged
+        ListBoxClub.Items.Clear()
+        Dim str As String
+        For I As Integer = 0 To MasterArray.GetLength(1) - 1
+            If MasterArray(cmbxGroups.SelectedIndex, I) <> "" Then
+                ListBoxClub.Items.Add(MasterArray(cmbxGroups.SelectedIndex, I))
+            End If
+        Next
+    End Sub
+End Class
