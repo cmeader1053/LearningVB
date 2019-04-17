@@ -1,0 +1,41 @@
+Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnCalculate.Click
+        Dim dectech As Decimal
+        Dim decTraining As Decimal
+        Dim decCloud As Decimal
+        Dim decOptionalTotal As Decimal
+
+        If radYearly.Checked = True Then
+            lblSoftware.Text = 5000.ToString("c")
+        ElseIf radOne.Checked = True Then
+            lblSoftware.Text = 20000.ToString("c")
+        End If
+
+        If chkTech.Checked = True Then
+            dectech = 3500
+        End If
+
+        If chkTraining.Checked = True Then
+            decTraining += 2000
+        End If
+
+        If chkCloud.Checked = True Then
+            decCloud += 300
+        End If
+
+        decOptionalTotal = decTech + decTraining + decCloud
+
+        lblOptional.Text = decOptionalTotal.ToString("c")
+
+Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        lblSoftware.Text = String.Empty
+        lblOptional.Text = String.Empty
+
+        radOne.Checked = False
+        radYearly.Checked = False
+
+        chkTech.Checked = False
+        chkTraining.Checked = False
+        chkCloud.Checked = False
+
+Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Me.Close()
