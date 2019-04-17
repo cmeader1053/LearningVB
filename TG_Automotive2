@@ -1,0 +1,186 @@
+Public Class frmOilLube
+    Dim decCrank As Decimal = 36D
+    Dim decTrans As Decimal = 42D
+    Dim decLube As Decimal = 28D
+    Dim decOilLube As Decimal = 0D
+
+    Private Sub frmOilLube_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnConfirm.Click
+
+        If chboxCrank.Checked = True Then
+            decOilLube += decCrank
+        End If
+        If chboxLube.Checked = True Then
+            decOilLube += decLube
+        End If
+        If chboxTrans.Checked = True Then
+            decOilLube += decTrans
+        End If
+
+        lblOilLubeStat.Text = "Total Oil and Lube Services " & decOilLube.ToString("c")
+
+        frmTG.lblOilLube.Text = "Oil and Lube services " & decOilLube.ToString("c")
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        frmTG.Show()
+        Me.Hide()
+    End Sub
+
+    Private Sub statOilLube_ItemClicked(sender As Object, e As ToolStripItemClickedEventArgs) Handles StatOilLube.ItemClicked
+
+    End Sub
+
+    Private Sub ToolStripStatusLabel1_Click(sender As Object, e As EventArgs) Handles lblOilLubeStat.Click
+
+    End Sub
+End Class
+Public Class frmTG
+    Const decTax_Rate As Decimal = 0.06D
+    Const decOil As Decimal = 36D
+    Const decCrank As Decimal = 42D
+    Const decLube As Decimal = 28D
+    Const decRadiator As Decimal = 50D
+    Const decTransmission As Decimal = 120D
+    Const decInspection As Decimal = 15D
+    Const decMuffler As Decimal = 200D
+    Const decTire As Decimal = 20D
+
+    Dim decOilLube As Decimal = 0D
+
+    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
+        End
+    End Sub
+
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        lblOilLube.Text = String.Empty
+        lblServiceLabor.Text = String.Empty
+        lblParts.Text = String.Empty
+        lblTax.Text = String.Empty
+        lblTotal.Text = String.Empty
+
+        txtParts.Text = "0"
+        txtLabor.Text = "0"
+    End Sub
+    Sub ClearMisc()
+        chboxInspection.Checked = False
+        chboxMuffler.Checked = False
+        chboxTire.Checked = False
+    End Sub
+    Sub ClearFlushes()
+        chboxRadFlush.Checked = False
+        chboxTransFlush.Checked = False
+    End Sub
+
+    Private Sub btnCalcTotal_Click(sender As Object, e As EventArgs) Handles btnCalcTotal.Click
+        Dim decServicesandLabor As Decimal
+        Dim decParts As Decimal
+        Dim decTax As Decimal
+        Dim decTotalFees As Decimal
+
+        If Not ValidateInputs() Then
+            Exit Sub
+        End If
+
+        decServicesandLabor = CalcOilLubeCharges() + CalcFlushCharges() + CalcMiscCharges() + txtLabor.Text
+        decParts = txtParts.Text
+        decTax = decTax_Rate * txtParts.Text
+        decTotalFees = decServicesandLabor + decParts + decTax
+
+        lblServiceLabor.Text = decServicesandLabor.ToString("c")
+        lblParts.Text = decParts.ToString("c")
+        lblTax.Text = decTax.ToString("c")
+        lblTotal.Text = decTotalFees.ToString("c")
+    End Sub
+
+    Private Function ValidateInputs() As Boolean
+        Dim blnValid As Boolean
+        Dim blnDec As Decimal
+
+        blnValid = Decimal.TryParse(txtParts.Text, blnDec)
+
+        If blnValid = False Or blnDec < 0 Then
+            MsgBox("Please enter a dollar amount for the cost of the parts.")
+            With txtParts
+                .SelectAll()
+                .Focus()
+            End With
+            Return False
+        End If
+
+        blnValid = Decimal.TryParse(txtLabor.Text, blnDec)
+
+        If blnValid = False Or blnDec < 0 Then
+            MsgBox("Please enter a dollar amount for Labor Cost.")
+            With txtLabor
+                .SelectAll()
+                .Focus()
+            End With
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Function CalcFlushCharges() As Decimal
+        Dim decRadTrans As Decimal = 0D
+
+        If chboxRadFlush.Checked = True Then
+            decRadTrans += decRadiator
+        End If
+        If chboxTransFlush.Checked = True Then
+            decRadTrans += decTransmission
+        End If
+        Return decRadTrans
+    End Function
+
+    Function CalcMiscCharges() As Decimal
+        Dim decMisc As Decimal = 0
+
+        If chboxInspection.Checked = True Then
+            decMisc += decInspection
+        End If
+        If chboxMuffler.Checked = True Then
+            decMisc += decMuffler
+        End If
+        If chboxTire.Checked = True Then
+            decMisc += decTire
+        End If
+        Return decMisc
+    End Function
+
+    Function CalcOilLubeCharges() As Decimal
+        Dim decOilLube As Decimal = 0D
+        If frmOilLube.chboxCrank.Checked = True Then
+            decOilLube += decCrank
+        End If
+        If frmOilLube.chboxLube.Checked = True Then
+            decOilLube += decLube
+        End If
+        If frmOilLube.chboxTrans.Checked = True Then
+            decOilLube += decTransmission
+        End If
+        Return decOilLube
+    End Function
+
+    Private Function CalcTax(ByVal decAmount As Decimal) As Decimal
+        Dim decParts As Decimal
+        If txtParts.Text = String.Empty Then
+            Return 0
+        Else
+            decParts = CDec(txtParts.Text)
+            Return decParts * decTax_Rate
+        End If
+    End Function
+
+    Private Sub FrmTGAuto_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub btnReturn_Click(sender As Object, e As EventArgs) Handles btnReturn.Click
+        frmOilLube.Show()
+        Me.Hide()
+    End Sub
+End Class
