@@ -1,0 +1,29 @@
+namespace Ch2___Latin_Translator
+{
+    public partial class frmLatinTranslator : Form
+    {
+        public frmLatinTranslator()
+        {
+            InitializeComponent();
+        }
+
+        private void btnSinister_Click(object sender, EventArgs e)
+        {
+            lblTranslator.Text = "Left";
+        }
+
+        private void btnMedium_Click(object sender, EventArgs e)
+        {
+            lblTranslator.Text = "Middle";
+        }
+
+        private void btnDexter_Click(object sender, EventArgs e)
+        {
+            lblTranslator.Text = "Right";
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
