@@ -1,0 +1,231 @@
+Public Class WebForm1
+    Inherits System.Web.UI.Page
+
+    Public Property MessageBox As Object
+
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        ' Get today's date from the system and display it
+        lblDate.Text = Now.ToString("D")
+
+        ' Get the current time from the system and display it
+        lblTime.Text = Now.ToString("T")
+    End Sub
+    Protected Sub Button1_Click(sender As Object, e As EventArgs) Handles btnCalcCharges.Click
+        ' Declare variables for the calculation
+        Dim decRoomCharges As Decimal              ' Room charges total
+        Dim decAdditionalCharges As Decimal        ' Additional Charges
+        Dim decSubtotal As Decimal                 ' Subtotal
+        Dim decTax As Decimal                      ' Tax 
+        Dim decTotal As Decimal                    ' Total of all Charges
+        Const decTax_Rate As Decimal = 0.08D       ' Tax Rate
+
+        Try
+            ' Calculate and display the room charges
+            decRoomCharges = CDec(txtNights.Text) * CDec(txtNightlyCharge.Text)
+            lblRoomCharges.Text = decRoomCharges.ToString("c")
+
+            ' Calculate and display the additional charges
+            decAdditionalCharges = CDec(txtRoomService.Text) + CDec(txtTelephone.Text) + CDec(txtMisc.Text)
+            lblAdditionalCharges.Text = decAdditionalCharges.ToString("c")
+
+            ' Calculate and display the subtotal
+            decSubtotal = decRoomCharges + decAdditionalCharges
+            lblSubtotal.Text = decSubtotal.ToString("c")
+
+            ' Calculate and display the tax
+            decTax = decSubtotal * decTax_Rate
+            lblTax.Text = decTax.ToString("c")
+
+            ' Calculate and display the total charges
+            decTotal = decSubtotal + decTax
+            lblTotalCharges.Text = decTotal.ToString("c")
+        Catch ex As Exception
+            ' Error message
+            MessageBox.Show("All input must be valid numeric values")
+        End Try
+    End Sub
+
+    Protected Sub Button2_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        ' Clear the room info fields
+        txtNights.Text = ""
+        txtNightlyCharge.Text = ""
+
+        ' Clear the additional charges fields
+        txtRoomService.Text = ""
+        txtTelephone.Text = ""
+        txtMisc.Text = ""
+
+        ' Clear the decTotal fields
+        lblRoomCharges.Text = String.Empty
+        lblAdditionalCharges.Text = String.Empty
+        lblSubtotal.Text = String.Empty
+        lblTax.Text = String.Empty
+        lblTotalCharges.Text = String.Empty
+
+        ' Get today's date from the operating system and display it
+        lblDate.Text = Now.ToString("D")
+
+        ' Get the current time from the operating system and display it
+        lblTime.Text = Now.ToString("T")
+
+        ' Resent the focus to the first field
+        txtNights.Focus()
+    End Sub
+End Class
+
+HTML Code:
+
+<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="WebForm1.aspx.vb" Inherits="Room_Charge_Calc.WebForm1" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Room Charge Calculator</title>
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+            margin-bottom: 0px;
+        }
+        .auto-style2 {
+            height: 25px;
+        }
+        .auto-style3 {
+            width: 100%;
+            height: 32px;
+        }
+        .auto-style4 {
+            height: 22px;
+        }
+        .auto-style5 {
+            width: 359px;
+        }
+        .auto-style6 {
+            width: 227px;
+        }
+        .auto-style7 {
+            height: 22px;
+            width: 227px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h1 style="text-align: center">Highlander Hotel</h1>
+            <p style="text-align: center">
+                Today&#39;s Date:<asp:Label ID="lblDate" runat="server"></asp:Label>
+            </p>
+            <p style="text-align: center">
+                Time:<asp:Label ID="lblTime" runat="server"></asp:Label>
+            </p>
+            <table class="auto-style1">
+                <tr>
+                    <td>
+            <asp:Panel ID="Panel1" runat="server" Height="103px" Width="296px">
+                <asp:Label ID="Label1" runat="server" Text="Room Information:"></asp:Label>
+                <br />
+                <table class="auto-style1">
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label2" runat="server" Text="Nights:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtNights" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label3" runat="server" Text="Nightly Charge:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtNightlyCharge" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+                    </td>
+                    <td>
+            <asp:Panel ID="Panel2" runat="server" Height="160px" Width="338px">
+                <asp:Label ID="Label4" runat="server" Text="Additional Information:"></asp:Label>
+                <br />
+                <table class="auto-style1">
+                    <tr>
+                        <td class="auto-style2">
+                            <asp:Label ID="Label5" runat="server" Text="Room Service:"></asp:Label>
+                        </td>
+                        <td class="auto-style2">
+                            <asp:TextBox ID="txtRoomService" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Misc:</td>
+                        <td>
+                            <asp:TextBox ID="txtMisc" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:Label ID="Label6" runat="server" Text="Telephone:"></asp:Label>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtTelephone" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+                    </td>
+                </tr>
+            </table>
+            <asp:Panel ID="Panel3" runat="server" Height="170px">
+                <asp:Label ID="Label8" runat="server" Text="Total Charges:"></asp:Label>
+                <br />
+                <table class="auto-style3">
+                    <tr>
+                        <td class="auto-style6">Room Charges:</td>
+                        <td>
+                            <asp:Label ID="lblRoomCharges" runat="server" BackColor="White"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style6">Additional Charges:</td>
+                        <td>
+                            <asp:Label ID="lblAdditionalCharges" runat="server" BackColor="White"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style6">Subtotal:</td>
+                        <td>
+                            <asp:Label ID="lblSubtotal" runat="server" BackColor="White"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style7">Tax:</td>
+                        <td class="auto-style4">
+                            <asp:Label ID="lblTax" runat="server" BackColor="White"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="auto-style6">Total Charges</td>
+                        <td>
+                            <asp:Label ID="lblTotalCharges" runat="server" BackColor="White"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+        </div>
+        <table class="auto-style3">
+            <tr>
+                <td class="auto-style5">
+                    <asp:Button ID="btnCalcCharges" runat="server" Text="Calculate Charges" />
+                </td>
+                <td>
+                    <asp:Button ID="btnClear" runat="server" Text="Clear" />
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
+
